@@ -1,32 +1,30 @@
 /**
- * Armazenamento em memória
+ * Stores the cache in memory
  * @type {object}
  */
 const storage = {}
 
 /**
- * Recupera um valor referente a uma chave passada como parâmetro, da memória
- * @param { string } key Chave do cache
+ * Recovers a value that refers to a key passed as parameter. In this case the
+ * returned value includes the time to expire, data and key
+ *
+ * @param { string } key Cache key
  * @returns { Promise<any> }
  */
 const get = (key) => {
 
-    if (!storage[key]) {
-
-        return Promise.resolve(null)
-
-    }
+    if (!storage[key]) { return Promise.resolve(null) }
 
     return Promise.resolve(storage[key])
 
 }
 
 /**
- * Insere um novo registro no cache ou atualiza um registro já existente, quando
- * a chave já for referenciada na memória
- * @param { string } key Chave para ser inserida (ou atualizada) no cache
- * @param { * } data Objeto ou valor que deve ser inserido no cache
- * @param { number } expirationTimestamp Timestamp que o cache deve ser expirado
+ * Inserts new data in the cache or updates a data already there.
+ *
+ * @param { string } key Cache key to be inserted or updated in cache
+ * @param { * } data Any data to be inserted or updated in cache
+ * @param { number } expirationTimestamp Expiration timestamp for the key
  * @returns {Promise<any>}
  */
 const upsert = (key, data, expirationTimestamp) => {
@@ -35,18 +33,13 @@ const upsert = (key, data, expirationTimestamp) => {
 
         if (entidade) {
 
-            storage[key] = {
-                dtExpiracao: expirationTimestamp,
-                dado: data
-            }
+            storage[key] =
+                { dtExpiracao: expirationTimestamp, dado: data }
 
         } else {
 
-            storage[key] = {
-                chave: key,
-                dtExpiracao: expirationTimestamp,
-                dado: data
-            }
+            storage[key] =
+                { chave: key, dtExpiracao: expirationTimestamp, dado: data }
 
         }
 
@@ -57,19 +50,16 @@ const upsert = (key, data, expirationTimestamp) => {
 }
 
 /**
- * Remove uma chave do cache
- * @param { string } key A chave a ser removida do cache
+ * Removes a key from cache
+ *
+ * @param { string } key The cache key to be removed
  * @returns { Promise<boolean> }
  */
 const remove = (key) => {
 
     return get(key).then(entidade => {
 
-        if (entidade) {
-
-            delete storage[key]
-
-        }
+        if (entidade) { delete storage[key] }
 
         return Promise.resolve(true)
 
@@ -78,16 +68,12 @@ const remove = (key) => {
 }
 
 /**
- * Volta o cache ao seu estado inicial, removendo todas as chaves e valores
- * @return true
+ * Removes every key in cache
+ * @return Promise<boolean>
  */
 const flush = () => {
 
-    Object.keys(storage).map(key => {
-
-        delete storage[key]
-
-    })
+    Object.keys(storage).map(key => { delete storage[key] })
 
     return Promise.resolve(true)
 
