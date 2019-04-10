@@ -14,10 +14,12 @@ jobs:
         - ~/node_modules
 
   test:
+    docker:
+      - image: circleci/node:latest
     steps:
-    - restore_cache:
+      - restore_cache:
         key: v1-nm-{{ .Environment.CIRCLE_SHA1 }}
-    - run:
+      - run:
         name: "Running tests"
         command: npm t
 
