@@ -21,7 +21,7 @@ jobs:
         key: v1-nm-{{ .Environment.CIRCLE_SHA1 }}
       - run:
         name: "Running tests"
-        command: npm t
+        command: npm test
 
 workflows:
   version: 2
