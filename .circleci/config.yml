@@ -18,10 +18,10 @@ jobs:
       - image: circleci/node:latest
     steps:
       - restore_cache:
-        key: v1-nm-{{ .Environment.CIRCLE_SHA1 }}
+          key: v1-nm-{{ .Environment.CIRCLE_SHA1 }}
       - run:
-        name: "Running tests"
-        command: npm test
+          name: "Running tests"
+          command: npm test
 
 workflows:
   version: 2
