@@ -24,13 +24,27 @@ const getNowTimestamp = () => Math.round(new Date().getTime() / 1000)
  * @param {number} seconds Number of seconds to add in the current timestamp
  * @returns {number}
  */
-const livefor = seconds => {
+const livefor = (seconds) => {
 
     const now = getNowTimestamp()
 
     return typeof seconds === 'string'
         ? now + parseInt(seconds)
         : now + seconds
+
+}
+
+const liveforInSeconds = (timestamp) => {
+
+    const now = getNowTimestamp()
+
+    const unix = typeof timestamp === 'string'
+        ? parseInt(timestamp)
+        : timestamp
+
+    const diff = now - unix
+
+    return diff <= 0 ? 0 : diff
 
 }
 
@@ -44,4 +58,4 @@ const livefor = seconds => {
  */
 const now = () => getNowTimestamp()
 
-module.exports = { now, livefor, getNowTimestamp }
+module.exports = { now, livefor, getNowTimestamp, liveforInSeconds }

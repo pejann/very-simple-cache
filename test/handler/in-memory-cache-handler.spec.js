@@ -19,7 +19,9 @@ describe('In Memory Cache Handler', async () => {
         it('should return null when there is no value bounded to the key', async () => {
 
             const value = await imch.get('minha_chave')
-            expect(value).to.equal(null)
+            expect(value).to.be.a('object')
+                .to.have.property('data')
+                .to.equal(null)
 
         })
 
@@ -28,7 +30,7 @@ describe('In Memory Cache Handler', async () => {
             await imch.upsert('chave', 'meu_valor', ttlNextHour)
             const value = await imch.get('chave')
 
-            expect(value).to.have.property('dado')
+            expect(value).to.have.property('data')
                 .to.equal('meu_valor')
 
         })
@@ -37,7 +39,7 @@ describe('In Memory Cache Handler', async () => {
 
             const value = await imch.get('chave')
 
-            expect(value).to.have.property('dado')
+            expect(value).to.have.property('data')
                 .to.equal('meu_valor')
 
         })
@@ -46,10 +48,10 @@ describe('In Memory Cache Handler', async () => {
 
             const value = await imch.get('chave')
 
-            expect(value).to.have.property('dado')
-            expect(value).to.have.property('dtExpiracao')
+            expect(value).to.have.property('data')
+            expect(value).to.have.property('unixExpirationDate')
                 .to.be.a('number')
-            expect(value).to.have.property('chave')
+            expect(value).to.have.property('key')
                 .to.be.a('string')
 
         })
@@ -70,7 +72,7 @@ describe('In Memory Cache Handler', async () => {
                     setTimeout(async () => {
 
                         const value = await imch.get('minha_nova_chave')
-                        expect(value).to.have.property('dado')
+                        expect(value).to.have.property('data')
                             .to.have.property('theAnswer')
                             .to.equal(42)
                         done()
@@ -92,7 +94,7 @@ describe('In Memory Cache Handler', async () => {
             await imch.upsert('minha_nova_chave', objectToInsert, ttlNextHour)
             const value = await imch.get('minha_nova_chave')
 
-            expect(value).to.have.property('dado')
+            expect(value).to.have.property('data')
                 .to.have.property('theAnswer')
                 .to.equal(42)
 
@@ -105,7 +107,7 @@ describe('In Memory Cache Handler', async () => {
             await imch.upsert('minha_nova_chave', objectToInsert, ttlNextHour)
             const value = await imch.get('minha_nova_chave')
 
-            expect(value).to.have.property('dado')
+            expect(value).to.have.property('data')
                 .to.have.property('theAnswer')
                 .to.equal(42)
 
@@ -114,7 +116,7 @@ describe('In Memory Cache Handler', async () => {
             await imch.upsert('minha_nova_chave', objectToReplace, ttlNextHour)
             const newValue = await imch.get('minha_nova_chave')
 
-            expect(newValue).to.have.property('dado')
+            expect(newValue).to.have.property('data')
                 .to.have.property('theAnswer')
                 .to.equal(43)
 
@@ -131,14 +133,16 @@ describe('In Memory Cache Handler', async () => {
             await imch.upsert('minha_nova_chave', objectToInsert, ttlNextHour)
             const value = await imch.get('minha_nova_chave')
 
-            expect(value).to.have.property('dado')
+            expect(value).to.have.property('data')
                 .to.have.property('theAnswer')
                 .to.equal(42)
 
             await imch.remove('minha_nova_chave')
 
             const newValue = await imch.get('minha_nova_chave')
-            expect(newValue).to.equal(null)
+            expect(newValue).to.be.a('object')
+                .to.have.property('data')
+                .to.equal(null)
 
         })
 
@@ -148,7 +152,9 @@ describe('In Memory Cache Handler', async () => {
             expect(removed).to.equal(true)
 
             const newValue = await imch.get('minha_nova_chave2')
-            expect(newValue).to.equal(null)
+            expect(newValue).to.be.a('object')
+                .to.have.property('data')
+                .to.equal(null)
 
         })
 
@@ -163,7 +169,7 @@ describe('In Memory Cache Handler', async () => {
             await imch.upsert('minha_nova_chave', objectToInsert, ttlNextHour)
 
             const value = await imch.get('minha_nova_chave')
-            expect(value).to.have.property('dado')
+            expect(value).to.have.property('data')
                 .to.have.property('theAnswer')
                 .to.equal(42)
 
@@ -171,7 +177,9 @@ describe('In Memory Cache Handler', async () => {
             expect(flushed).to.equal(true)
 
             const afterFlushValue = await imch.get('minha_nova_chave')
-            expect(afterFlushValue).to.equal(null)
+            expect(afterFlushValue).to.be.a('object')
+                .to.have.property('data')
+                .to.equal(null)
 
         })
 

@@ -1,7 +1,6 @@
-/**
- * Stores the cache in memory
- * @type {object}
- */
+const { blankCacheData, createCacheDataByUnixTimestamp } = require('../helper/cache-data')
+
+/* Stores the cache in memory */
 const storage = {}
 
 /**
@@ -9,11 +8,11 @@ const storage = {}
  * returned value includes the time to expire, data and key
  *
  * @param { string } key Cache key
- * @returns { Promise<any> }
+ * @returns { Promise<CacheData> }
  */
 const get = (key) => {
 
-    if (!storage[key]) { return Promise.resolve(null) }
+    if (!storage[key]) { return Promise.resolve(blankCacheData()) }
 
     return Promise.resolve(storage[key])
 
@@ -25,27 +24,12 @@ const get = (key) => {
  * @param { string } key Cache key to be inserted or updated in cache
  * @param { * } data Any data to be inserted or updated in cache
  * @param { number } expirationTimestamp Expiration timestamp for the key
- * @returns {Promise<any>}
+ * @returns {Promise<CacheData>}
  */
 const upsert = (key, data, expirationTimestamp) => {
 
-    return get(key).then(entidade => {
-
-        if (entidade) {
-
-            storage[key] =
-                { dtExpiracao: expirationTimestamp, dado: data }
-
-        } else {
-
-            storage[key] =
-                { chave: key, dtExpiracao: expirationTimestamp, dado: data }
-
-        }
-
-        return Promise.resolve(storage[key])
-
-    })
+    storage[key] = createCacheDataByUnixTimestamp(key, data, expirationTimestamp)
+    return Promise.resolve(storage[key])
 
 }
 

@@ -269,7 +269,7 @@ describe('Cache Service', () => {
 
             const value = await cacheS.get('minha_chave_123')
             expect(value).to.be.a('object')
-                .to.have.property('dado')
+                .to.have.property('data')
                 .to.equal('oi')
 
             setTimeout(async () => {
@@ -315,14 +315,14 @@ describe('Cache Service', () => {
 
             const value = await cacheS.get('minha_chave_1234')
             expect(value).to.be.a('object')
-                .to.have.property('dado')
+                .to.have.property('data')
                 .to.equal('oi')
 
             await cacheS.upsert('minha_chave_1234', 'oi2', '1000')
 
             const value2 = await cacheS.get('minha_chave_1234')
             expect(value2).to.be.a('object')
-                .to.have.property('dado')
+                .to.have.property('data')
                 .to.equal('oi2')
 
         })

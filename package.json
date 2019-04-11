@@ -9,7 +9,7 @@
         "coverage": "NODE_ENV=test nyc --reporter=html mocha test --recursive --timeout 15000",
         "lint": "eslint . --cache",
         "lint-fix": "npm run lint -- --fix",
-        "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src"
+        "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src && cp ./out/jsdoc-results.d.ts ./"
     },
     "keywords": [
         "cache"
