@@ -42,7 +42,7 @@ const liveforInSeconds = (timestamp) => {
         ? parseInt(timestamp)
         : timestamp
 
-    const diff = now - unix
+    const diff = unix - now
 
     return diff <= 0 ? 0 : diff
 
