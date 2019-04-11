@@ -1,5 +1,26 @@
 const { now, livefor } = require('../helper/time')
 const { isNil, isObject, isDate } = require('../helper/validation')
+/**
+ * @typedef CacheHandler
+ * @type {object}
+ * @property {function} get
+ * @property {function} upsert
+ * @property {function} remove
+ */
+/**
+ * @typedef CacheOptions
+ * @type {?object}
+ * @property {?function} currentTimeFn
+ * @property {?function} addSecondsFn
+ */
+/**
+ * @typedef CacheService
+ * @type {object}
+ * @property {function} get
+ * @property {function} upsert
+ * @property {function} remove
+ * @property {function} getOrCacheThat
+ */
 
 /**
  * Returns a register from cache by the key or, in the case the register was not
@@ -11,7 +32,7 @@ const { isNil, isObject, isDate } = require('../helper/validation')
  * get({}, () => {})('minha_chave')
  * >>> Promise {null}
  *
- * @param {object} cacheHandler Object with cache implementation
+ * @param {CacheHandler} cacheHandler Object with cache implementation
  * @param {function} currentTimeFn Function to retrieve the current time
  * @return {function}
  */
@@ -117,9 +138,9 @@ const isValidCacheHandler = (cacheHandler) => {
  * Creates a cache service with a cache handler that handles the implementation
  * of the storage
  *
- * @param {object} cacheHandler Object with cache implementation
- * @param {{currentTimeFn: function, addSecondsFn: function}} options Object with time grab functions
- * @returns {{get: Function, upsert: Function, remove: Function, getOrCacheThat: Function}}
+ * @param {CacheHandler} cacheHandler Object with cache implementation
+ * @param {CacheOptions} options Object with time grab functions
+ * @returns {CacheService}
  */
 const createCacheService = (cacheHandler, options = {}) => {
 

@@ -1,6 +1,7 @@
 # Dist
 cloud/
 dist/
+out/
 
 # Dependências
 node_modules/
