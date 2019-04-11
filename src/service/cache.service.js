@@ -1,4 +1,5 @@
 const { now, livefor } = require('../helper/time')
+const { isNil, isObject, isDate } = require('../helper/validation')
 
 /**
  * Returns a register from cache by the key or, in the case the register was not
@@ -100,6 +101,18 @@ const getOrCacheThat = (cacheHandler, currentTimeFn, addSecondsFn) => (key, fn, 
 
 }
 
+const isValidCacheHandler = (cacheHandler) => {
+
+    if (!isObject(cacheHandler)) return false
+
+    if (isDate(cacheHandler)) return false
+
+    return !(typeof cacheHandler.get !== 'function' ||
+        typeof cacheHandler.upsert !== 'function' ||
+        typeof cacheHandler.remove !== 'function')
+
+}
+
 /**
  * Creates a cache service with a cache handler that handles the implementation
  * of the storage
@@ -110,17 +123,18 @@ const getOrCacheThat = (cacheHandler, currentTimeFn, addSecondsFn) => (key, fn, 
  */
 const createCacheService = (cacheHandler, options = {}) => {
 
-    if (cacheHandler === null ||
-        cacheHandler === undefined ||
-        typeof cacheHandler !== 'object' ||
-        typeof cacheHandler.getMonth === 'function' ||
-        typeof cacheHandler.get !== 'function' ||
-        typeof cacheHandler.upsert !== 'function' ||
-        typeof cacheHandler.remove !== 'function') {
+    if (isNil(cacheHandler)) { throw new SyntaxError('It is necessary to inform a cache handler') }
 
-        throw new SyntaxError('Cache Handler should be a valid module')
+    if (!isValidCacheHandler(cacheHandler)) {
+
+        throw new SyntaxError(
+            'Cache Handler should imlement get, upsert and remove functions')
 
     }
+
+    if (isNil(options)) options = {}
+
+    if (!isObject(options) || isDate(options)) throw new SyntaxError('Options should be a valid object')
 
     const currentTimeFn = options['currentTimeFn']
         ? options['currentTimeFn']

@@ -82,6 +82,131 @@ describe('Cache Service', () => {
 
         })
 
+        it('should create a valid cache service when options param is null', () => {
+
+            const mockCacheHandler = {
+                get: () => {},
+                upsert: () => {},
+                remove: () => {},
+                getOrCacheThat: () => {}
+            }
+
+            const cacheS = cacheService.createCacheService(mockCacheHandler, null)
+
+            expect(cacheS).to.be.a('object')
+            expect(cacheS).to.have.property('get')
+                .to.be.a('function')
+            expect(cacheS).to.have.property('upsert')
+                .to.be.a('function')
+            expect(cacheS).to.have.property('remove')
+                .to.be.a('function')
+
+        })
+
+        it('should create a valid cache service when options param is undefined', () => {
+
+            const mockCacheHandler = {
+                get: () => {},
+                upsert: () => {},
+                remove: () => {},
+                getOrCacheThat: () => {}
+            }
+
+            const cacheS = cacheService.createCacheService(mockCacheHandler, undefined)
+
+            expect(cacheS).to.be.a('object')
+            expect(cacheS).to.have.property('get')
+                .to.be.a('function')
+            expect(cacheS).to.have.property('upsert')
+                .to.be.a('function')
+            expect(cacheS).to.have.property('remove')
+                .to.be.a('function')
+
+        })
+
+        it('should create a valid cache service when options param is empty object', () => {
+
+            const mockCacheHandler = {
+                get: () => {},
+                upsert: () => {},
+                remove: () => {},
+                getOrCacheThat: () => {}
+            }
+
+            const cacheS = cacheService.createCacheService(mockCacheHandler, {})
+
+            expect(cacheS).to.be.a('object')
+            expect(cacheS).to.have.property('get')
+                .to.be.a('function')
+            expect(cacheS).to.have.property('upsert')
+                .to.be.a('function')
+            expect(cacheS).to.have.property('remove')
+                .to.be.a('function')
+
+        })
+
+        it('should throw error if options param is a string', () => {
+
+            const getUpsertRemoveHandler =
+                { get: () => {}, upsert: () => {}, remove: () => {} }
+
+            const optionsAsString =
+                () => cacheService.createCacheService(getUpsertRemoveHandler, 'options')
+
+            expect(optionsAsString)
+                .to.throw(SyntaxError)
+
+        })
+
+        it('should throw error if options param is a boolean', () => {
+
+            const getUpsertRemoveHandler =
+                { get: () => {}, upsert: () => {}, remove: () => {} }
+
+            const optionsAsString =
+                () => cacheService.createCacheService(getUpsertRemoveHandler, true)
+
+            expect(optionsAsString)
+                .to.throw(SyntaxError)
+
+        })
+        it('should throw error if options param is a date', () => {
+
+            const getUpsertRemoveHandler =
+                { get: () => {}, upsert: () => {}, remove: () => {} }
+
+            const optionsAsString =
+                () => cacheService.createCacheService(getUpsertRemoveHandler, new Date())
+
+            expect(optionsAsString)
+                .to.throw(SyntaxError)
+
+        })
+        it('should throw error if options param is a number', () => {
+
+            const getUpsertRemoveHandler =
+                { get: () => {}, upsert: () => {}, remove: () => {} }
+
+            const optionsAsString =
+                () => cacheService.createCacheService(getUpsertRemoveHandler, 10)
+
+            expect(optionsAsString)
+                .to.throw(SyntaxError)
+
+        })
+        it('should throw error if options param is a array', () => {
+
+            const getUpsertRemoveHandler =
+                { get: () => {}, upsert: () => {}, remove: () => {} }
+
+            const optionsAsString =
+                () => cacheService.createCacheService(getUpsertRemoveHandler, [])
+
+            expect(optionsAsString)
+                .to.throw(SyntaxError)
+
+        })
+
     })
 
     describe('remove', () => {
