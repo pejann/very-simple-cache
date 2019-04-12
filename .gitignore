@@ -5,14 +5,9 @@ out/
 
 # Dependências
 node_modules/
-package-lock.json
 
 # Cache
 .eslintcache
-
-# Runner
-runner-input.json
-runner-config.json
 
 # Logs
 *.log
