@@ -10,49 +10,15 @@
     "ecmaVersion": 8,
     "sourceType": "module"
   },
-  "globals": {
-    "Parse": true
-  },
   "rules": {
     "require-jsdoc": "off",
     "no-undef": "error",
-    "object-property-newline": [
-      "error",
-      { "allowAllPropertiesOnSameLine": true }
-    ],
     "new-cap": [
       "error",
       {
         "newIsCap": false,
         "capIsNew": false
       }
-    ],
-    "indent": [
-      "error",
-      4
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single",
-      {
-        "allowTemplateLiterals": true
-      }
-    ],
-    "semi": [
-      "error",
-      "never"
-    ],
-    "padded-blocks": [
-      "error",
-      "always",
-      {
-        "allowSingleLineBlocks": true
-      }
     ]
-
   }
 }

@@ -1,4 +1,3 @@
-const { now, livefor } = require('../helper/time')
 const { isNil, isObject, isDate } = require('../helper/validation')
 const { get, getOrCacheThat, upsert, remove } = require('./cache-functions')
 
@@ -39,15 +38,15 @@ const { get, getOrCacheThat, upsert, remove } = require('./cache-functions')
  * @return {boolean}
  */
 const isValidCacheHandler = (cacheHandler) => {
+  if (!isObject(cacheHandler)) return false
 
-    if (!isObject(cacheHandler)) return false
+  if (isDate(cacheHandler)) return false
 
-    if (isDate(cacheHandler)) return false
-
-    return !(typeof cacheHandler.get !== 'function' ||
+  return !(
+    typeof cacheHandler.get !== 'function' ||
         typeof cacheHandler.upsert !== 'function' ||
-        typeof cacheHandler.remove !== 'function')
-
+        typeof cacheHandler.remove !== 'function'
+  )
 }
 
 /**
@@ -55,41 +54,25 @@ const isValidCacheHandler = (cacheHandler) => {
  * of the storage
  *
  * @param {CacheHandler} cacheHandler Object with cache implementation
- * @param {CacheOptions} options Object with time grab functions
  * @returns {CacheService}
  */
-const createCacheService = (cacheHandler, options = {}) => {
+const createCacheService = (cacheHandler) => {
+  if (isNil(cacheHandler)) {
+    throw new SyntaxError('It is necessary to inform a cache handler')
+  }
 
-    if (isNil(cacheHandler)) { throw new SyntaxError('It is necessary to inform a cache handler') }
+  if (!isValidCacheHandler(cacheHandler)) {
+    throw new SyntaxError('Cache Handler should imlement get, upsert and remove functions')
+  }
 
-    if (!isValidCacheHandler(cacheHandler)) {
-
-        throw new SyntaxError(
-            'Cache Handler should imlement get, upsert and remove functions')
-
-    }
-
-    if (isNil(options)) options = {}
-
-    if (!isObject(options) || isDate(options)) throw new SyntaxError('Options should be a valid object')
-
-    const currentTimeFn = options['currentTimeFn']
-        ? options['currentTimeFn']
-        : now
-
-    const addSecondsFn = options['addSecondsFn']
-        ? options['addSecondsFn']
-        : livefor
-
-    return {
-        get: get(cacheHandler, currentTimeFn),
-        upsert: upsert(cacheHandler, addSecondsFn),
-        remove: remove(cacheHandler),
-        getOrCacheThat: getOrCacheThat(cacheHandler, currentTimeFn, addSecondsFn)
-    }
-
+  return {
+    get: get(cacheHandler),
+    upsert: upsert(cacheHandler),
+    remove: remove(cacheHandler),
+    getOrCacheThat: getOrCacheThat(cacheHandler)
+  }
 }
 
 module.exports = {
-    createCacheService
+  createCacheService
 }
