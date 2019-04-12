@@ -35,8 +35,5 @@
         "mocha": "^6.0.2",
         "nyc": "^13.3.0",
         "prettier": "^1.16.4"
-    },
-    "dependencies": {
-        "redis": "^2.8.0"
     }
 }
