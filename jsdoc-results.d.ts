@@ -10,10 +10,10 @@ declare function get(key: string): Promise<CacheData>;
  * Inserts new data in the cache or updates a data already there.
  * @param key Cache key to be inserted or updated in cache
  * @param data Any data to be inserted or updated in cache
- * @param expirationTimestamp Expiration timestamp for the key
+ * @param ttlInSeconds Expiration in seconds for the key
  * @returns
  */
-declare function upsert(key: string, data: any, expirationTimestamp: number): Promise<CacheData>;
+declare function upsert(key: string, data: any, ttlInSeconds: number): Promise<CacheData>;
 
 /**
  * Removes a key from cache
@@ -51,6 +51,13 @@ declare function createCacheDataByTtlInSeconds(key: string, data: any, ttlInSeco
 declare function createCacheDataByUnixTimestamp(key: string, data: any, unixTimestamp: number): CacheData;
 
 /**
+ * Check if the cache data (CacheData) is expired
+ * @param cacheData
+ * @returns
+ */
+declare function isExpired(cacheData: CacheData): boolean;
+
+/**
  * Returns the current time in unix timestamp format UTC, in seconds
  * 
  * getNowTimestamp :: () -> number
@@ -74,7 +81,7 @@ declare function getNowTimestamp(): number;
  * @param seconds Number of seconds to add in the current timestamp
  * @returns
  */
-declare function livefor(seconds: number): number;
+declare function livefor(seconds: number | string): number;
 
 /**
  * Alias for get the current timestamp
@@ -92,10 +99,8 @@ declare function now(): number;
  * getOrCacheThat({}, () => {}, () => {})('minha_chave', () => {}, 3600)
  * >>> Promise {}
  * @param cacheHandler Object with cache implementation
- * @param currentTimeFn Function to retrieve the current time
- * @param addSecondsFn Function to return the time with seconds added
  */
-declare function getOrCacheThat(cacheHandler: CacheHandler, currentTimeFn: Function, addSecondsFn: Function): Function;
+declare function getOrCacheThat(cacheHandler: CacheHandler): Function;
 
 declare interface CacheHandler {
     get: Function;
@@ -132,8 +137,7 @@ declare function isValidCacheHandler(cacheHandler: CacheHandler): boolean;
  * Creates a cache service with a cache handler that handles the implementation
  * of the storage
  * @param cacheHandler Object with cache implementation
- * @param options Object with time grab functions
  * @returns
  */
-declare function createCacheService(cacheHandler: CacheHandler, options: CacheOptions): CacheService;
+declare function createCacheService(cacheHandler: CacheHandler): CacheService;
 

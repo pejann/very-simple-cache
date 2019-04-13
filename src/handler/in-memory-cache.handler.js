@@ -1,7 +1,7 @@
 const {
-    isExpired,
-    blankCacheData,
-    createCacheDataByTtlInSeconds,
+  isExpired,
+  blankCacheData,
+  createCacheDataByTtlInSeconds
 } = require('../helper/cache-data')
 
 /* Stores the cache in memory */
@@ -15,16 +15,16 @@ const storage = {}
  * @returns { Promise<CacheData> }
  */
 const get = (key) => {
-    if (!storage[key]) {
-        return Promise.resolve(blankCacheData())
-    }
+  if (!storage[key]) {
+    return Promise.resolve(blankCacheData())
+  }
 
-    const data = storage[key]
-    if (isExpired(data)) {
-        return Promise.resolve(blankCacheData())
-    }
+  const data = storage[key]
+  if (isExpired(data)) {
+    return Promise.resolve(blankCacheData())
+  }
 
-    return Promise.resolve(data)
+  return Promise.resolve(data)
 }
 
 /**
@@ -36,8 +36,8 @@ const get = (key) => {
  * @returns {Promise<CacheData>}
  */
 const upsert = (key, data, ttlInSeconds) => {
-    storage[key] = createCacheDataByTtlInSeconds(key, data, ttlInSeconds)
-    return Promise.resolve(storage[key])
+  storage[key] = createCacheDataByTtlInSeconds(key, data, ttlInSeconds)
+  return Promise.resolve(storage[key])
 }
 
 /**
@@ -47,13 +47,13 @@ const upsert = (key, data, ttlInSeconds) => {
  * @returns { Promise<boolean> }
  */
 const remove = (key) => {
-    return get(key).then((entidade) => {
-        if (entidade) {
-            delete storage[key]
-        }
+  return get(key).then((entidade) => {
+    if (entidade) {
+      delete storage[key]
+    }
 
-        return Promise.resolve(true)
-    })
+    return Promise.resolve(true)
+  })
 }
 
 /**
@@ -61,16 +61,16 @@ const remove = (key) => {
  * @return Promise<boolean>
  */
 const flush = () => {
-    Object.keys(storage).map((key) => {
-        delete storage[key]
-    })
+  Object.keys(storage).map((key) => {
+    delete storage[key]
+  })
 
-    return Promise.resolve(true)
+  return Promise.resolve(true)
 }
 
 module.exports = {
-    get,
-    upsert,
-    remove,
-    flush,
+  get,
+  upsert,
+  remove,
+  flush
 }

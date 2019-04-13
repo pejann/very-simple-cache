@@ -14,10 +14,10 @@ const blankCacheData = () => ({ unixExpirationDate: null, secondsToExpire: null,
  * @return {CacheData}
  */
 const createCacheDataByTtlInSeconds = (key, data, ttlInSeconds) => ({
-    unixExpirationDate: livefor(ttlInSeconds),
-    secondsToExpire: ttlInSeconds,
-    key,
-    data,
+  unixExpirationDate: livefor(ttlInSeconds),
+  secondsToExpire: ttlInSeconds,
+  key,
+  data
 })
 
 /**
@@ -29,10 +29,10 @@ const createCacheDataByTtlInSeconds = (key, data, ttlInSeconds) => ({
  * @return {CacheData}
  */
 const createCacheDataByUnixTimestamp = (key, data, unixTimestamp) => ({
-    unixExpirationDate: unixTimestamp,
-    secondsToExpire: liveforInSeconds(unixTimestamp),
-    key,
-    data,
+  unixExpirationDate: unixTimestamp,
+  secondsToExpire: liveforInSeconds(unixTimestamp),
+  key,
+  data
 })
 
 /**
@@ -43,8 +43,8 @@ const createCacheDataByUnixTimestamp = (key, data, unixTimestamp) => ({
 const isExpired = (cacheData) => now() > cacheData.unixExpirationDate
 
 module.exports = {
-    blankCacheData,
-    createCacheDataByTtlInSeconds,
-    createCacheDataByUnixTimestamp,
-    isExpired,
+  blankCacheData,
+  createCacheDataByTtlInSeconds,
+  createCacheDataByUnixTimestamp,
+  isExpired
 }

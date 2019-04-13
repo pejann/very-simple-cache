@@ -1,5 +1,5 @@
 {
   "hooks": {
-    "pre-commit": "npm t"
+    "pre-commit": "npm t && npm run lint-fix && npm run type:ts:generate && git add ."
   }
 }

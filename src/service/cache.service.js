@@ -38,15 +38,15 @@ const { get, getOrCacheThat, upsert, remove } = require('./cache-functions')
  * @return {boolean}
  */
 const isValidCacheHandler = (cacheHandler) => {
-    if (!isObject(cacheHandler)) return false
+  if (!isObject(cacheHandler)) return false
 
-    if (isDate(cacheHandler)) return false
+  if (isDate(cacheHandler)) return false
 
-    return !(
-        typeof cacheHandler.get !== 'function' ||
+  return !(
+    typeof cacheHandler.get !== 'function' ||
         typeof cacheHandler.upsert !== 'function' ||
         typeof cacheHandler.remove !== 'function'
-    )
+  )
 }
 
 /**
@@ -57,22 +57,22 @@ const isValidCacheHandler = (cacheHandler) => {
  * @returns {CacheService}
  */
 const createCacheService = (cacheHandler) => {
-    if (isNil(cacheHandler)) {
-        throw new SyntaxError('It is necessary to inform a cache handler')
-    }
+  if (isNil(cacheHandler)) {
+    throw new SyntaxError('It is necessary to inform a cache handler')
+  }
 
-    if (!isValidCacheHandler(cacheHandler)) {
-        throw new SyntaxError('Cache Handler should imlement get, upsert and remove functions')
-    }
+  if (!isValidCacheHandler(cacheHandler)) {
+    throw new SyntaxError('Cache Handler should imlement get, upsert and remove functions')
+  }
 
-    return {
-        get: get(cacheHandler),
-        upsert: upsert(cacheHandler),
-        remove: remove(cacheHandler),
-        getOrCacheThat: getOrCacheThat(cacheHandler),
-    }
+  return {
+    get: get(cacheHandler),
+    upsert: upsert(cacheHandler),
+    remove: remove(cacheHandler),
+    getOrCacheThat: getOrCacheThat(cacheHandler)
+  }
 }
 
 module.exports = {
-    createCacheService,
+  createCacheService
 }
