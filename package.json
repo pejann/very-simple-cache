@@ -11,7 +11,8 @@
         "lint": "eslint . --cache",
         "lint-fix": "npm run lint -- --fix",
         "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src && cp ./out/jsdoc-results.d.ts ./",
-        "pretty": "prettier --write \"src/**/*.js\""
+        "pretty": "prettier --write \"src/**/*.js\"",
+        "precommit": "lint-staged && npm test"
     },
     "lint-staged": {
         "src/*": [
