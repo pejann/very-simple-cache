@@ -12,11 +12,16 @@
         "lint-fix": "npm run lint -- --fix",
         "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src && cp ./out/jsdoc-results.d.ts ./",
         "pretty": "prettier --write \"src/**/*.js\"",
+        "pretty:test": "prettier --write \"test/**/*.js\"",
         "precommit": "lint-staged && npm test"
     },
     "lint-staged": {
         "src/*": [
             "npm run pretty",
+            "git add"
+        ],
+        "test/*": [
+            "npm run pretty:test",
             "git add"
         ]
     },

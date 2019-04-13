@@ -13,15 +13,15 @@ const { blankCacheData } = require('../helper/cache-data')
  * @return {function}
  */
 const get = (cacheHandler) => (key) => {
-  return cacheHandler
-    .get(key)
-    .then((entidade) => {
-      if (!entidade) {
-        return Promise.resolve(blankCacheData())
-      }
-      return Promise.resolve(entidade)
-    })
-    .catch((_) => Promise.resolve(blankCacheData()))
+    return cacheHandler
+        .get(key)
+        .then((entidade) => {
+            if (!entidade) {
+                return Promise.resolve(blankCacheData())
+            }
+            return Promise.resolve(entidade)
+        })
+        .catch((_) => Promise.resolve(blankCacheData()))
 }
 
 /**
@@ -63,24 +63,24 @@ const remove = (cacheHandler) => (key) => cacheHandler.remove(key)
  * @return {function}
  */
 const getOrCacheThat = (cacheHandler) => (key, fn, ttl = 3600) => {
-  return get(cacheHandler)(key).then((hit) => {
-    if (hit.data) {
-      return Promise.resolve(hit.data)
-    }
+    return get(cacheHandler)(key).then((hit) => {
+        if (hit.data) {
+            return Promise.resolve(hit.data)
+        }
 
-    const promise = Promise.resolve(fn())
+        const promise = Promise.resolve(fn())
 
-    return promise.then((computed) => {
-      upsert(cacheHandler)(key, computed, ttl)
+        return promise.then((computed) => {
+            upsert(cacheHandler)(key, computed, ttl)
 
-      return Promise.resolve(computed)
+            return Promise.resolve(computed)
+        })
     })
-  })
 }
 
 module.exports = {
-  get,
-  getOrCacheThat,
-  remove,
-  upsert
+    get,
+    getOrCacheThat,
+    remove,
+    upsert,
 }
