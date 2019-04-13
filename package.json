@@ -11,10 +11,13 @@
         "lint": "eslint . --cache",
         "lint-fix": "npm run lint -- --fix",
         "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src && cp ./out/jsdoc-results.d.ts ./",
-        "pretty": "prettier"
+        "pretty": "prettier --write \"src/**/*.js\""
     },
     "lint-staged": {
-        "src/*": "your-cmd"
+        "src/*": [
+            "npm run pretty",
+            "git add"
+        ]
     },
     "keywords": [
         "cache"
