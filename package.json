@@ -1,6 +1,6 @@
 {
     "name": "very-simple-cache",
-    "version": "0.2.2",
+    "version": "0.3.0",
     "description": "Abstração básica para uma ferramenta de cache usando qualquer tecnologia desejada",
     "main": "cache.js",
     "types": "cache.d.ts",
