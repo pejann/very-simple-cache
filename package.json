@@ -3,14 +3,14 @@
     "version": "0.2.2",
     "description": "Abstração básica para uma ferramenta de cache usando qualquer tecnologia desejada",
     "main": "cache.js",
-    "types": "jsdoc-results.d.ts",
+    "types": "cache.d.ts",
     "scripts": {
         "test": "NODE_ENV=test mocha test --recursive --timeout 15000",
         "test:redis-handler": "NODE_ENV=test mocha test/handler/redis-cache.handler.spec.js --timeout 15000",
         "coverage": "NODE_ENV=test nyc --reporter=html mocha test --recursive --timeout 15000",
         "lint": "eslint . --cache",
         "lint-fix": "npm run lint -- --fix",
-        "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src && cp ./out/jsdoc-results.d.ts ./",
+        "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src && cp ./out/jsdoc-results.d.ts ./cache.d.ts",
         "pretty": "prettier --write \"src/**/*.js\"",
         "pretty:test": "prettier --write \"test/**/*.js\"",
         "precommit": "lint-staged && npm test"

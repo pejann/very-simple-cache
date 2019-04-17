@@ -4,7 +4,7 @@ const {
   createCacheDataByTtlInSeconds
 } = require('../helper/cache-data')
 
-/* Stores the cache in memory */
+/* Stores the cache data in memory */
 const storage = {}
 
 /**
