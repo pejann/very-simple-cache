@@ -3,14 +3,27 @@
     "version": "0.2.2",
     "description": "Abstração básica para uma ferramenta de cache usando qualquer tecnologia desejada",
     "main": "cache.js",
-    "types": "jsdoc-results.d.ts",
+    "types": "cache.d.ts",
     "scripts": {
         "test": "NODE_ENV=test mocha test --recursive --timeout 15000",
         "test:redis-handler": "NODE_ENV=test mocha test/handler/redis-cache.handler.spec.js --timeout 15000",
         "coverage": "NODE_ENV=test nyc --reporter=html mocha test --recursive --timeout 15000",
         "lint": "eslint . --cache",
         "lint-fix": "npm run lint -- --fix",
-        "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src && cp ./out/jsdoc-results.d.ts ./"
+        "type:ts:generate": "jsdoc -t node_modules/@otris/jsdoc-tsd -r src && cp ./out/jsdoc-results.d.ts ./cache.d.ts",
+        "pretty": "prettier --write \"src/**/*.js\"",
+        "pretty:test": "prettier --write \"test/**/*.js\"",
+        "precommit": "lint-staged && npm test"
+    },
+    "lint-staged": {
+        "src/*": [
+            "npm run pretty",
+            "git add"
+        ],
+        "test/*": [
+            "npm run pretty:test",
+            "git add"
+        ]
     },
     "keywords": [
         "cache"
@@ -32,8 +45,9 @@
         "eslint-plugin-standard": "^4.0.0",
         "husky": "^1.3.1",
         "jsdoc": "^3.5.5",
+        "lint-staged": "^8.1.5",
         "mocha": "^6.0.2",
         "nyc": "^13.3.0",
-        "prettier": "^1.16.4"
+        "prettier": "1.17.0"
     }
 }

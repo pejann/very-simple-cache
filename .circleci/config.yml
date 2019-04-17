@@ -2,15 +2,16 @@ version: 2
 jobs:
   build:
     docker:
-    - image: circleci/node:latest
+      - image: circleci/node:latest
     steps:
-    - checkout
-    - run:
-        name: "Instalando dependências"
-        command: npm install
-    - run:
-        name: "Running tests"
-        command: npm test
+      - checkout
+      - run:
+          name: "Instalando dependências"
+          command: npm install
+      - run:
+          name: "Running tests"
+          command: npm test
+
 
 workflows:
   version: 2

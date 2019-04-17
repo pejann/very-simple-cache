@@ -21,31 +21,23 @@ const getNowTimestamp = () => Math.round(new Date().getTime() / 1000)
  * livefor(30)
  * >>> 1554338638
  *
- * @param {number} seconds Number of seconds to add in the current timestamp
+ * @param {number | string} seconds Number of seconds to add in the current timestamp
  * @returns {number}
  */
 const livefor = (seconds) => {
+  const now = getNowTimestamp()
 
-    const now = getNowTimestamp()
-
-    return typeof seconds === 'string'
-        ? now + parseInt(seconds)
-        : now + seconds
-
+  return typeof seconds === 'string' ? now + parseInt(seconds) : now + seconds
 }
 
 const liveforInSeconds = (timestamp) => {
+  const now = getNowTimestamp()
 
-    const now = getNowTimestamp()
+  const unix = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp
 
-    const unix = typeof timestamp === 'string'
-        ? parseInt(timestamp)
-        : timestamp
+  const diff = unix - now
 
-    const diff = unix - now
-
-    return diff <= 0 ? 0 : diff
-
+  return diff <= 0 ? 0 : diff
 }
 
 /**

@@ -10,32 +10,18 @@ const { blankCacheData } = require('../helper/cache-data')
  * >>> Promise {null}
  *
  * @param {CacheHandler} cacheHandler Object with cache implementation
- * @param {function} currentTimeFn Function to retrieve the current time
  * @return {function}
  */
-const get = (cacheHandler, currentTimeFn) => key => {
-
-    return cacheHandler.get(key).then(entidade => {
-
-        if (entidade && entidade.unixExpirationDate) {
-
-            if (currentTimeFn() > entidade.unixExpirationDate) {
-
-                return cacheHandler
-                    .remove(entidade)
-                    .then(() => Promise.resolve(null))
-                    .catch(() => Promise.resolve(null))
-
-            }
-
-            return Promise.resolve(entidade)
-
-        }
-
+const get = (cacheHandler) => (key) => {
+  return cacheHandler
+    .get(key)
+    .then((entidade) => {
+      if (!entidade) {
         return Promise.resolve(blankCacheData())
-
+      }
+      return Promise.resolve(entidade)
     })
-
+    .catch((_) => Promise.resolve(blankCacheData()))
 }
 
 /**
@@ -47,11 +33,9 @@ const get = (cacheHandler, currentTimeFn) => key => {
  * >>> Promise {}
  *
  * @param {CacheHandler} cacheHandler Object with cache implementation
- * @param {function} addSecondsFn Function to return the time with seconds added
  * @return {function}
  */
-const upsert = (cacheHandler, addSecondsFn) => (key, data, ttlInSeconds = 7200) =>
-    cacheHandler.upsert(key, data, addSecondsFn(ttlInSeconds))
+const upsert = (cacheHandler) => (key, data, ttlInSeconds = 7200) => cacheHandler.upsert(key, data, ttlInSeconds)
 
 /**
  * Removes a key from cache
@@ -64,7 +48,7 @@ const upsert = (cacheHandler, addSecondsFn) => (key, data, ttlInSeconds = 7200) 
  * @param {CacheHandler} cacheHandler Object with cache implementation
  * @return {function}
  */
-const remove = (cacheHandler) => key => cacheHandler.remove(key)
+const remove = (cacheHandler) => (key) => cacheHandler.remove(key)
 
 /**
  * Get a data in the cache or, in case the data do not exists, executes a
@@ -76,32 +60,27 @@ const remove = (cacheHandler) => key => cacheHandler.remove(key)
  * >>> Promise {}
  *
  * @param {CacheHandler} cacheHandler Object with cache implementation
- * @param {function} currentTimeFn Function to retrieve the current time
- * @param {function} addSecondsFn Function to return the time with seconds added
  * @return {function}
  */
-const getOrCacheThat = (cacheHandler, currentTimeFn, addSecondsFn) => (key, fn, ttl = 3600) => {
+const getOrCacheThat = (cacheHandler) => (key, fn, ttl = 3600) => {
+  return get(cacheHandler)(key).then((hit) => {
+    if (hit.data) {
+      return Promise.resolve(hit.data)
+    }
 
-    return get(cacheHandler, currentTimeFn)(key).then(hit => {
+    const promise = Promise.resolve(fn())
 
-        if (hit.data) { return Promise.resolve(hit.data) }
+    return promise.then((computed) => {
+      upsert(cacheHandler)(key, computed, ttl)
 
-        const promise = Promise.resolve(fn())
-        return promise.then(computed => {
-
-            upsert(cacheHandler, addSecondsFn)(key, computed, ttl)
-
-            return Promise.resolve(computed)
-
-        })
-
+      return Promise.resolve(computed)
     })
-
+  })
 }
 
 module.exports = {
-    get,
-    getOrCacheThat,
-    remove,
-    upsert
+  get,
+  getOrCacheThat,
+  remove,
+  upsert
 }

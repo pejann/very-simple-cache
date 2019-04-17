@@ -26,7 +26,7 @@ const cacheService = createCacheService()
 ```
 
 The `cacheService` can't do anything by its own. You need to provide an implementation
-of the form of cache you need.
+of the cache you need.
 
 The library provides a very simple in-memory cache handler for testing.
 
@@ -44,13 +44,13 @@ To recover cache data use the `get` function:
 
 ```
 cacheService.get('my_key')
->>> Promise {*}
+>>> Promise {CacheData}
 ```
 
-The `get` function will return a `Promise` with the data. In case of the `inMemoryCache`
+The `get` function will return a `Promise` with the cache data. In case of the `inMemoryCache`
 the data returned will contain the expiration date, the data and the key.
 
-In the case of the key does not exists the `Promise` will be `null`.
+In the case of the key does not exists the `Promise` will be an empty cache data map.
 
 **The return value will depend on the implementation.**
 
@@ -60,7 +60,7 @@ To insert or update cache data use the `upsert` function:
 
 ```
 cacheService.upsert('my_key', 'my_data', 3600)
->>> Promise {*}
+>>> Promise {CacheData}
 ```
 
 The `upsert` function will return a `Promise` with the data inserted or updated.
@@ -86,7 +86,7 @@ You can use the get and upsert together with the `getOrCacheThat` function:
 
 ```
 cacheService.getOrCacheThat('my_key', () => {}, 3600)
->>> Promise {*}
+>>> Promise {Cache}
 ```
 
 With that function you retrieve a Promise with the data founded with the `key` parameter.
